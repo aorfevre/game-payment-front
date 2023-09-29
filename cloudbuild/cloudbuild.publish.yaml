@@ -4,7 +4,7 @@ steps:
     args: ["run", "create-env"]
     secretEnv:
         [
-          "NEXT_PUBLIC_API_BASE_URL",
+          "WALLET_CONNECT_PROJECT_ID",
         
         ]
   # Run unit tests on the app
