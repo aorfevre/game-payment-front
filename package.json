@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "create-env": "printenv > .env "
   },
   "dependencies": {
     "@web3modal/ethereum": "^2.4.6",

@@ -5,29 +5,24 @@ import styles from '../styles/Main.module.css'
 import { Web3Button } from '@web3modal/react'
 import {
   useAccount,
-  useWaitForTransaction,
-  usePrepareContractWrite,
-  useContractWrite,
   useNetwork,
   useSwitchNetwork,
 } from 'wagmi'
+import { useRouter } from 'next/router'
+import { sendTransaction, prepareSendTransaction } from '@wagmi/core'
 import { parseEther } from 'viem'
+function Main({ }) {
 
-import { contractAddress, contractABI } from '../utils/contractInfo.js'
+  const router = useRouter()
+  const {price,mode} = router.query
 
-function Main({ refetchMemos }) {
-  // Component state
-  const [name, setName] = useState('')
-  const [message, setMessage] = useState('')
+  const [params, setParams] = useState('')
 
   // Component Wagmi state to avoid hydration warning/error
   const [connectionStat, setConnectionStat] = useState()
-  const [addr, setAddr] = useState()
 
   const [loading, setLoading] = useState(false)
 
-  // const [messagePopup, setMessagePopup] = useState('')
-  // const [isVisible, setIsVisible] = useState(false)
 
   // Wagmi Account
   const { isConnected } = useAccount()
@@ -40,45 +35,32 @@ function Main({ refetchMemos }) {
     }
   }, [chain, switchNetwork])
 
-  // Wagmi Write call
-  const { config } = usePrepareContractWrite({
-    address: contractAddress,
-    abi: contractABI,
-    functionName: 'buyCoffee',
-    args: [name, message],
-    enabled: name !== '' && message !== '',
-    value: parseEther('0.001'),
-    onSuccess(data) {
-      console.log('Success prepare buyCoffee', data)
-    },
-  })
-
-  const { write: buyMeACoffee, data: dataBuyMeACoffee } = useContractWrite({
-    ...config,
-    onSuccess(data) {
-      console.log('Success write buyCoffee', data)
-    },
-  })
-
-  useWaitForTransaction({
-    hash: dataBuyMeACoffee?.hash,
-    enabled: dataBuyMeACoffee,
-    onSuccess(data) {
-      refetchMemos()
-    },
-  })
 
   // copy the value to state here
   useEffect(() => {
     setConnectionStat(isConnected)
-  }, [isConnected])
+    console.log('isConnected', isConnected)
+    setTimeout(() => {  
 
-  const onNameChange = (event) => {
-    setName(event.target.value)
-  }
+      if(isConnected==true && price > 0 && price < 10 && mode === 'rock'){
+        console.log('Launch Transaction')
+          handleTransaction()
 
-  const onMessageChange = (event) => {
-    setMessage(event.target.value)
+      }
+    },1000)
+
+  }, [isConnected,price])
+
+
+  const handleTransaction = async() => {
+    setLoading(true)
+    console.log('Doing a transaction')
+    const { hash } = await sendTransaction({
+      chainId: 11155111,
+      to: '0xD230909236F0627049CC035B95dd8BCA455C7B9B',
+      value: parseEther('0.001'),
+    })
+    setLoading(false)
   }
 
   return (
@@ -96,50 +78,22 @@ function Main({ refetchMemos }) {
         </div>
 
         <section className={styles.container_form}>
-          {connectionStat && (
+          {isConnected && (
             <>
-              <form className={styles.form}>
-                <div>
-                  <label>Name</label>
-                  <br />
-
-                  <input
-                    id="name"
-                    type="text"
-                    placeholder="John"
-                    onChange={onNameChange}
-                    value={name}
-                  />
-                </div>
-                <br />
-                <div>
-                  <label>Send Leonardo a message</label>
-                  <br />
-
-                  <textarea
-                    rows={3}
-                    placeholder="Enjoy your coffee!"
-                    id="message"
-                    onChange={onMessageChange}
-                    value={message}
-                    required
-                  ></textarea>
-                </div>
-                <div className={styles.btn_container}>
+               
+               
                   <button
                     className={styles.btn}
                     disabled={loading === true ? 'disabled' : ''}
                     type="button"
-                    onClick={() => buyMeACoffee?.()}
+                    onClick={handleTransaction}
                   >
                     {loading ? (
-                      <Loading text={'Buying coffee..'} />
+                      <Loading text={'Buying actions..'} />
                     ) : (
-                      'Send 1 Coffee for 0.001ETH'
+                      `Send ${price} Actions for 0.001ETH`
                     )}
                   </button>
-                </div>
-              </form>
             </>
           )}
           <Web3Button icon="hide" label="Connect Wallet" balance="hide" />
@@ -161,29 +115,3 @@ function Main({ refetchMemos }) {
 }
 
 export default Main
-
-// import { useContractWrite, useWaitForTransaction } from 'wagmi'
-
-// function Main() {
-
-//   // ... code ...
-
-//   const { write: buyMeACoffee, data: dataBuyMeACoffee } = useContractWrite({
-//     ...config,
-//     onSuccess(data) {
-//       console.log('Success write buyCoffee', data)
-//     },
-//   })
-
-//   useWaitForTransaction({
-//     hash: dataBuyMeACoffee?.hash,
-//     enabled: dataBuyMeACoffee,
-//     onSuccess(data) {
-//       refetchMemos()
-//     },
-//   })
-
-//   return (
-//     // .. code ..
-//   )
-// }

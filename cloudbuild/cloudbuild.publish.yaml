@@ -1,0 +1,48 @@
+steps:
+  - name: node:18.16.0
+    entrypoint: npm
+    args: ["run", "create-env"]
+    secretEnv:
+        [
+          "NEXT_PUBLIC_API_BASE_URL",
+        
+        ]
+  # Run unit tests on the app
+  - name:       'node:18.16.0'
+    id:         Test
+    entrypoint: /bin/sh
+    args:
+    - '-c'
+    - |
+      npm ci
+
+  # Build the containers images
+  - name:       'gcr.io/cloud-builders/docker'
+    id:         Build dev image
+    entrypoint: /bin/sh
+    args:       ['-c' , 'docker build -t $$IMAGE_NAME .']
+
+
+  # Push the containers images to Container Registry
+  - name:       'gcr.io/cloud-builders/docker'
+    id:         Deploy dev image
+    entrypoint: /bin/sh
+    args:       ['-c' , 'docker push $$IMAGE_NAME']
+
+  # Deploy bot-ingest to Cloud run
+  - name:       'gcr.io/cloud-builders/gcloud'
+    id:         Deploy api
+    entrypoint: /bin/sh
+    args:
+    - '-c'
+    - |
+      gcloud run deploy $$SERVICE_NAME --image $$IMAGE_NAME --region europe-west1 --platform managed --allow-unauthenticated --max-instances 1
+    env:        ['SERVICE_NAME=game-payment']
+
+options:
+  env:
+    - IMAGE_NAME=gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA
+availableSecrets:
+    secretManager:
+        - versionName: projects/${PROJECT_ID}/secrets/WALLET_CONNECT_PROJECT_ID/versions/latest
+          env: "WALLET_CONNECT_PROJECT_ID"
