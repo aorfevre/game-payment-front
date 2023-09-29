@@ -7,6 +7,16 @@ steps:
           "WALLET_CONNECT_PROJECT_ID",
         
         ]
+  # Run unit tests on the app
+  - name:       'node:18.16.0'
+    id:         Test
+    entrypoint: /bin/sh
+    args:
+    - '-c'
+    - |
+      npm ci && \
+      npm run build
+
   # Build the containers images
   - name:       'gcr.io/cloud-builders/docker'
     id:         Build dev image
