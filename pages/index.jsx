@@ -13,8 +13,8 @@ export default function Home() {
 
     <div className={styles.main}>
       <Head>
-        <title className={styles.title}>Buy Leonardo a Coffee!</title>
-        <meta name="description" content="Tipping site" />
+        <title className={styles.title}>Play Web3 Games!</title>
+        <meta name="description" content="Web3 Games" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

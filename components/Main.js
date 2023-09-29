@@ -14,7 +14,7 @@ import { parseEther } from 'viem'
 function Main({ }) {
 
   const router = useRouter()
-  const {price,mode} = router.query
+  const {hash} = router.query
 
   const [params, setParams] = useState('')
 
@@ -36,20 +36,32 @@ function Main({ }) {
   }, [chain, switchNetwork])
 
 
+  const callDecode = async (params) => {
+    try {
+      const res = await fetch(`${process.env.PUBLIC_API_URL}/decode?hash=${encodeURIComponent(decodeURIComponent(params))}`);
+      const data = await res.json();
+     return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
   // copy the value to state here
   useEffect(() => {
     setConnectionStat(isConnected)
     console.log('isConnected', isConnected)
-    setTimeout(() => {  
+    setTimeout(async() => {  
 
-      if(isConnected==true && price > 0 && price < 10 && mode === 'rock'){
+      if(isConnected==true && hash){
+        console.log
+        const decoded = await callDecode(hash)
+        setParams(decoded);
         console.log('Launch Transaction')
-          handleTransaction()
+        handleTransaction()
 
       }
     },1000)
 
-  }, [isConnected,price])
+  }, [isConnected,hash])
 
 
   const handleTransaction = async() => {
@@ -58,7 +70,7 @@ function Main({ }) {
     const { hash } = await sendTransaction({
       chainId: 11155111,
       to: '0xD230909236F0627049CC035B95dd8BCA455C7B9B',
-      value: parseEther('0.001'),
+      value: parseEther((params.price * 0.001 ).toString()),
     })
     setLoading(false)
   }
@@ -81,19 +93,21 @@ function Main({ }) {
           {isConnected && (
             <>
                
-               
-                  <button
-                    className={styles.btn}
-                    disabled={loading === true ? 'disabled' : ''}
-                    type="button"
-                    onClick={handleTransaction}
-                  >
-                    {loading ? (
-                      <Loading text={'Buying actions..'} />
-                    ) : (
-                      `Send ${price} Actions for 0.001ETH`
-                    )}
-                  </button>
+                {params && params.price ? <>
+                
+                      <button
+                        className={styles.btn}
+                        disabled={loading === true ? 'disabled' : ''}
+                        type="button"
+                        onClick={handleTransaction}
+                      >
+                        {loading ? (
+                          <Loading text={'Buying actions..'} />
+                        ) :  (
+                          `Send ${params.price} Actions for 0.001ETH`
+                        ) }
+                    </button>
+                  </>: <></>}
             </>
           )}
           <Web3Button icon="hide" label="Connect Wallet" balance="hide" />
