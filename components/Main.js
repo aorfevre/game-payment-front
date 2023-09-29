@@ -45,6 +45,22 @@ function Main({ }) {
       console.log(err);
     }
   };
+  //save the transaction hash to my api /play 
+  const savePlayTransaction = async(hash,txhash)=>{
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        txhash,
+        hash
+      })
+    };
+
+    return await fetch(`${process.env.PUBLIC_API_URL}/play`, requestOptions)
+
+  }
+
+  
   // copy the value to state here
   useEffect(() => {
     setConnectionStat(isConnected)
@@ -58,7 +74,7 @@ function Main({ }) {
         if(decoded && decoded.price && decoded.price >0 ){
           setParams(decoded);
           console.log('Launch Transaction')
-          handleTransaction()
+          handleTransaction(decoded,hash)
         }
        
 
@@ -68,17 +84,18 @@ function Main({ }) {
   }, [isConnected,hash])
 
 
-  const handleTransaction = async() => {
+  const handleTransaction = async(decoded,d) => {
     setLoading(true)
-    console.log('Doing a transaction',params)
-    if(params && params.price >0){
+    console.log('Doing a transaction',decoded)
+    if(decoded && decoded.price >0){
       const { hash } = await sendTransaction({
         chainId: Number(process.env.PUBLIC_CHAIN_ID),
         to: process.env.PUBLIC_RECEIVING_WALLET,
-        value: parseEther((params.price * 0.001 ).toString()),
+        value: parseEther((decoded.price * 0.001 ).toString()),
       })
       console.log('HASH OF THE TRANSCATION',hash)
       // Transaction is sent ! 
+      savePlayTransaction(d,hash)
   
       const data = await waitForTransaction({
         chainId:Number(process.env.PUBLIC_CHAIN_ID),
