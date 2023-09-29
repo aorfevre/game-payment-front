@@ -14,7 +14,8 @@ steps:
     args:
     - '-c'
     - |
-      npm ci
+      npm ci && \
+      npm run build
 
   # Build the containers images
   - name:       'gcr.io/cloud-builders/docker'
