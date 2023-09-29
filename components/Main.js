@@ -9,7 +9,7 @@ import {
   useSwitchNetwork,
 } from 'wagmi'
 import { useRouter } from 'next/router'
-import { sendTransaction, prepareSendTransaction } from '@wagmi/core'
+import { sendTransaction, waitForTransaction } from '@wagmi/core'
 import { parseEther } from 'viem'
 function Main({ }) {
 
@@ -30,8 +30,8 @@ function Main({ }) {
   const { switchNetwork } = useSwitchNetwork()
 
   useEffect(() => {
-    if (chain?.id !== 11155111 && chain?.name !== 'Sepolia') {
-      switchNetwork?.(11155111)
+    if (chain?.id !== Number(process.env.PUBLIC_CHAIN_ID) && chain?.name !== 'Sepolia') {
+      switchNetwork?.(Number(process.env.PUBLIC_CHAIN_ID))
     }
   }, [chain, switchNetwork])
 
@@ -53,10 +53,14 @@ function Main({ }) {
 
       if(isConnected==true && hash){
         console.log
-        const decoded = await callDecode(hash)
-        setParams(decoded);
-        console.log('Launch Transaction')
-        handleTransaction()
+        const decoded = await callDecode(hash);
+        console.log('Decoded',decoded)
+        if(decoded && decoded.price && decoded.price >0 ){
+          setParams(decoded);
+          console.log('Launch Transaction')
+          handleTransaction()
+        }
+       
 
       }
     },1000)
@@ -66,12 +70,23 @@ function Main({ }) {
 
   const handleTransaction = async() => {
     setLoading(true)
-    console.log('Doing a transaction')
-    const { hash } = await sendTransaction({
-      chainId: 11155111,
-      to: '0xD230909236F0627049CC035B95dd8BCA455C7B9B',
-      value: parseEther((params.price * 0.001 ).toString()),
-    })
+    console.log('Doing a transaction',params)
+    if(params && params.price >0){
+      const { hash } = await sendTransaction({
+        chainId: Number(process.env.PUBLIC_CHAIN_ID),
+        to: process.env.PUBLIC_RECEIVING_WALLET,
+        value: parseEther((params.price * 0.001 ).toString()),
+      })
+      console.log('HASH OF THE TRANSCATION',hash)
+      // Transaction is sent ! 
+  
+      const data = await waitForTransaction({
+        chainId:Number(process.env.PUBLIC_CHAIN_ID),
+        hash
+      })
+      console.log('data finished',data)
+    }
+
     setLoading(false)
   }
 
@@ -93,7 +108,7 @@ function Main({ }) {
           {isConnected && (
             <>
                
-                {params && params.price ? <>
+                {params && params.price && !isNaN(params.price)? <>
                 
                       <button
                         className={styles.btn}
