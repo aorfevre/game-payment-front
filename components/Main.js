@@ -90,8 +90,8 @@ function Main({ }) {
     if(decoded && decoded.price >0){
       const { hash } = await sendTransaction({
         chainId: Number(process.env.PUBLIC_CHAIN_ID),
-        to: process.env.PUBLIC_RECEIVING_WALLET,
-        value: parseEther((decoded.price * 0.001 ).toString()),
+        to: decoded.payout_wallet,
+        value: parseEther(((decoded.price * decoded.number * 1000)/1000 ).toString()),
       })
       console.log('HASH OF THE TRANSCATION',hash)
       // Transaction is sent ! 
