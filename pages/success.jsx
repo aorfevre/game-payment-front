@@ -1,9 +1,7 @@
 import Head from 'next/head'
 import React, { useEffect, useState } from "react";
 import styles from "../styles/index.module.css";
-import Main from '../components/Main'
-import Card from '../components/Card'
-import Footer from '../components/Footer'
+import Success from '../components/Success'
 
 
 
@@ -17,11 +15,7 @@ export default function Home() {
         <meta name="description" content="Web3 Games" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Main />
-
-     
-      <Footer />
+    <Success/>
 
     </div>
   )

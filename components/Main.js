@@ -9,11 +9,15 @@ import {
   useSwitchNetwork,
 } from 'wagmi'
 import { useRouter } from 'next/router'
-import { sendTransaction, waitForTransaction } from '@wagmi/core'
+import { sendTransaction, waitForTransaction,switchNetwork } from '@wagmi/core'
 import { parseEther } from 'viem'
+
+
+
 function Main({ }) {
 
   const router = useRouter()
+  const {push} = useRouter()
   const {hash} = router.query
 
   const [params, setParams] = useState('')
@@ -27,13 +31,8 @@ function Main({ }) {
   // Wagmi Account
   const { isConnected } = useAccount()
   const { chain } = useNetwork()
-  const { switchNetwork } = useSwitchNetwork()
+  // const { switchNetwork } = useSwitchNetwork()
 
-  useEffect(() => {
-    if (chain?.id !== Number(process.env.PUBLIC_CHAIN_ID) && chain?.name !== 'Sepolia') {
-      switchNetwork?.(Number(process.env.PUBLIC_CHAIN_ID))
-    }
-  }, [chain, switchNetwork])
 
 
   const callDecode = async (params) => {
@@ -64,24 +63,34 @@ function Main({ }) {
   // copy the value to state here
   useEffect(() => {
     setConnectionStat(isConnected)
-    console.log('isConnected', isConnected)
-    setTimeout(async() => {  
 
-      if(isConnected==true && hash){
-        console.log
-        const decoded = await callDecode(hash);
-        console.log('Decoded',decoded)
-        if(decoded && decoded.price && decoded.price >0 ){
-          setParams(decoded);
-          console.log('Launch Transaction')
-          handleTransaction(decoded,hash)
-        }
-       
+    if(isConnected && hash && chain && chain?.id === Number(process.env.PUBLIC_CHAIN_ID)){
 
-      }
-    },1000)
+      setTimeout(async() => {  
+
+          console.log
+          const decoded = await callDecode(hash);
+          console.log('Decoded',decoded)
+          if(decoded && decoded.price && decoded.price >0 ){
+            setParams(decoded);
+            handleTransaction(decoded,hash)
+          }
+        
+
+      },1000)
+    }
+
 
   }, [isConnected,hash])
+
+  useEffect(() => {
+    if (isConnected && chain && chain?.id !== Number(process.env.PUBLIC_CHAIN_ID)) {
+      setTimeout(()=>{
+        switchNetwork({chainId:Number(process.env.PUBLIC_CHAIN_ID)})
+
+      },500)
+    }
+  }, [chain])
 
 
   const handleTransaction = async(decoded,d) => {
@@ -98,10 +107,13 @@ function Main({ }) {
       savePlayTransaction(d,hash)
   
       const data = await waitForTransaction({
-        chainId:Number(process.env.PUBLIC_CHAIN_ID),
         hash
       })
       console.log('data finished',data)
+      if(data){
+        push('/success')
+
+      }
     }
 
     setLoading(false)
@@ -125,6 +137,15 @@ function Main({ }) {
           {isConnected && (
             <>
                
+               {params && params.price && !isNaN(params.price)? <>
+               <ul>
+                <li>Game: {params.game}</li>
+                <li>Action: {params.action}</li>
+                <li>Bet size per play: {params.price}</li>
+                <li>Number of plays: {params.number}</li>
+                <li>Total bet: {params.number*params.price}</li>
+               </ul>
+               </>: <></>}
                 {params && params.price && !isNaN(params.price)? <>
                 
                       <button
@@ -136,7 +157,7 @@ function Main({ }) {
                         {loading ? (
                           <Loading text={'Buying actions..'} />
                         ) :  (
-                          `Send ${params.price} Actions for 0.001ETH`
+                          `Participate with ${params.number*params.price}ETH`
                         ) }
                     </button>
                   </>: <></>}

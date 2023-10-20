@@ -1,14 +1,15 @@
 import '../styles/globals.css'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/react'
+import { useEffect } from 'react'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
+import {baseGoerli,base } from 'wagmi/chains'
 
 if (!process.env.WALLET_CONNECT_PROJECT_ID) {
   throw new Error('You need to provide WALLET_CONNECT_PROJECT_ID env variable')
 }
 
-const chains = [sepolia]
+const chains = [baseGoerli]
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
@@ -19,7 +20,10 @@ const wagmiConfig = createConfig({
 })
 const ethereumClient = new EthereumClient(wagmiConfig, chains)
 
+
 function MyApp({ Component, pageProps }) {
+
+
   return (
   <>
     <WagmiConfig config={wagmiConfig}>
@@ -29,7 +33,8 @@ function MyApp({ Component, pageProps }) {
     <Web3Modal projectId={projectId} ethereumClient={ethereumClient} themeVariables={{
     '--w3m-background-color': '#C58940',
     '--w3m-accent-color': '#C58940',
-  }} />
+  }}  
+  defaultChain={baseGoerli}/>
   </>
 )
 }
