@@ -14,7 +14,7 @@ export default function Hero( ) {
                         Duel other players for ETH in game-theory minigames seamlessly through our Telegram Bot
                         & take home the prize pool 🏆
                     </div>
-                    <Button type="link" onClick = {()=>{}} disabled={false} className="btn__text" title="⚡ Let’s duel ⚡" link="/payment" glow={true} />
+                    <Button type="link" onClick = {()=>{}} disabled={false} className="btn__text" title="⚡ Let’s duel ⚡" link="https://t.me/DeductionDuel_bot" responsive={true} target="_blank"/>
                 </div>
             </div>
         </div>

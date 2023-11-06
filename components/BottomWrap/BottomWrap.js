@@ -21,7 +21,7 @@ export default function BottomWrap() {
                         <div className={componentStyle.col_content}>
                             <h6 className={componentStyle.subtitle}>READY TO DUEL?</h6>
                             <h3 className={componentStyle.title}>Play now on Telegram</h3>
-                            <Button type="link" onClick = {()=>{}} disabled={false} className="btn__black" title={'Launch app on Telegram'} link="#" />
+                            <Button type="link" onClick = {()=>{}} disabled={false} className="btn__black" title={'Launch app on Telegram'} link="https://t.me/DeductionDuel_bot" target="_blank" />
                         </div>
                     </div>
                 </div>

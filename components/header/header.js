@@ -20,8 +20,8 @@ function Header() {
                             <img src="/assets/images/logo-white1.svg" alt="" className={componentStyle.header_logo} />
                         </a>
                     </div>
-                    <Button type="link" onClick = {()=>{}} disabled={false} className="btn__outline_res" title="Play pvp duels" link="#" responsive={true} />
-                    <Button type="link" onClick = {()=>{}} disabled={false} className="btn__outline_small" title="Play" link="#" responsive={true} />
+                    <Button type="link" onClick = {()=>{}} disabled={false} className="btn__outline_res" title="Play pvp duels" link="https://t.me/DeductionDuel_bot" responsive={true} target="_blank" />
+                    <Button type="link" onClick = {()=>{}} disabled={false} className="btn__outline_small" title="Play" link="https://t.me/DeductionDuel_bot" responsive={true} target="_blank" />
                 </div>
             </div>
         </div>
