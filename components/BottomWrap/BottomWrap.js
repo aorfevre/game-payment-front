@@ -8,7 +8,7 @@ export default function BottomWrap() {
         <div className={componentStyle.bottom_wrap_section}>
             <div className="container">
                 <div className="row">
-                    {/* <img src="/assets/images/duel.svg" alt="" className={componentStyle.background} /> */}
+                    {/* <img src="/assets/images/lightning.png" alt="" className={componentStyle.background} /> */}
                     {/* Use above image is animation is not required */}
                     <div className={componentStyle.background}>
                         <svg width="100%" height="110%" viewBox="0 0 343 526" fill="none" xmlns="http://www.w3.org/2000/svg">
