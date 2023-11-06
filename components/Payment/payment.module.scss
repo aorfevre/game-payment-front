@@ -1,0 +1,113 @@
+@import "../../styles/variable.scss";
+
+.payment {
+    padding: 70px 0;
+    background-color: $black_primary;
+    text-align: center;
+
+    @media(max-width:1200px) {
+        padding: 60px 0;
+    }
+    @media(max-width:991px) {
+        padding: 45px 0;
+    }
+    @media(max-width:600px) {
+        padding: 30px 0;
+    }
+    .col_logo {
+        padding-bottom: 75px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @media(max-width:1200px) {
+            padding-bottom: 60px;
+        }
+        @media(max-width:991px) {
+            padding-bottom: 45px;
+        }
+        @media(max-width:600px) {
+            padding-bottom: 30px;
+        }
+        .logo {
+            width: 100%;
+            max-width: 420px;
+            object-fit: contain;
+            @media(max-width:600px) {
+                max-width: 350px;
+            }
+        }
+
+        &.confirmed {
+            padding-bottom: 20vh;
+            @media(max-width:1200px) {
+                padding-bottom: 17vh;
+            }
+            @media(max-width:991px) {
+                padding-bottom: 14vh;
+            }
+            @media(max-width:600px) {
+                padding-bottom: 10vh;
+            }
+            @media(max-width:450px) {
+                padding-bottom: 7vh;
+            }
+        }
+    }
+    .col_cta {
+        text-align: center;
+        .title {
+            margin-top: 0;
+            margin-bottom: 36px;
+            @media(max-width:991px) {
+                margin-bottom: 30px;
+            }
+            @media(max-width:600px) {
+                margin-bottom: 20px;
+            }
+        }
+        .body {
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 32px;
+            color: $white_secondary;
+            padding-bottom: 73px;
+            @media(max-width:1200px) {
+                padding-bottom: 60px;
+            }
+            @media(max-width:991px) {
+                padding-bottom: 45px;
+            }
+            @media(max-width:600px) {
+                font-size: 18px;
+                line-height: 26px;
+                padding-bottom: 30px;
+            }
+        }
+    }
+    .bottom_wrap {
+        margin-top: 189px;
+        @media(max-width:1200px) {
+            margin-top: 150px;
+        }
+        @media(max-width:991px) {
+            margin-top: 100px;
+        }
+        @media(max-width:600px) {
+            margin-top: 50px;
+        }
+        .content {
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 32px;
+            color: $white_secondary;
+            text-align: center;
+            max-width: 885px;
+            margin: auto;
+            @media(max-width:600px) {
+                font-size: 18px;
+                line-height: 26px;
+            }
+        }
+    }
+}

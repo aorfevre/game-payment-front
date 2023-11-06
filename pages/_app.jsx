@@ -4,6 +4,7 @@ import { Web3Modal } from '@web3modal/react'
 import { useEffect } from 'react'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import {baseGoerli,base } from 'wagmi/chains'
+import 'bootstrap/dist/css/bootstrap.css';
 
 if (!process.env.WALLET_CONNECT_PROJECT_ID) {
   throw new Error('You need to provide WALLET_CONNECT_PROJECT_ID env variable')
@@ -31,8 +32,15 @@ function MyApp({ Component, pageProps }) {
     </WagmiConfig>
 
     <Web3Modal projectId={projectId} ethereumClient={ethereumClient} themeVariables={{
-    '--w3m-background-color': '#C58940',
-    '--w3m-accent-color': '#C58940',
+    '--w3m-background-color': '#FFFF09',
+    '--w3m-accent-color': '#FFFF09',
+    '--w3m-button-border-radius': '50px',
+    '--w3m-background-border-radius': '50px',
+    '--w3m-container-border-radius': '50px',
+    '--w3m-accent-fill-color': '0C0C0C',
+    '--w3m-color-fg-1': '0C0C0C',
+    '--w3m-text-medium-regular-text-transform': 'uppercase',
+    '--w3m-text-medium-regular-weight': '500',
   }}  
   defaultChain={baseGoerli}/>
   </>
