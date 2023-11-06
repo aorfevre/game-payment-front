@@ -23,9 +23,7 @@ function Payment() {
   const [BtnTitle, setBtnTitle] = useState('Connect wallet');
   const { open, close } = useWeb3Modal()
 
-  const handlePayment = () => {
-    paymentStatus ==2 ? setPaymentStatus(0) : (setPaymentStatus(paymentStatus+1), setBtnTitle('Back to Telegram'));
-  }
+
 
   const router = useRouter()
   const {push} = useRouter()
@@ -108,9 +106,11 @@ function Payment() {
       const data = await waitForTransaction({
         hash
       })
-      console.log('data finished',data)
+
       if(data){
-        push('/success');
+        setPaymentStatus(2);
+      }else{
+        setPaymentStatus(1);
       }
     }
     setLoading(false)
