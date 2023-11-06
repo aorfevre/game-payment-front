@@ -129,8 +129,11 @@ function Payment() {
                       { paymentStatus === 0 ? 'Pay to enter duel' : paymentStatus === 1 ? 'Error' : 'Payment confirmed' }
                       </h2>
                     <div className={paymentStyle.body}>
-                      { paymentStatus === 0 && 
-                        <> Pay {`< total amount >`} ETH to play {`<amount>`} game(s) of {`<game name>`} </> 
+                      { paymentStatus === 0 && params && 
+                        <> Pay {(params.price * params.number * 1000)/1000} ETH to play {params.number } game(s) of {params.game} </> 
+                      }
+                       { paymentStatus === 0 && !params && 
+                        <> Loading ... </> 
                       }
                       { paymentStatus === 1 &&  
                         <>
