@@ -155,8 +155,21 @@ function Payment() {
                         paymentStatus != 2 && 
                         <div>
                           <Web3Button icon="hide" label="Connect Wallet" balance="hide" size={'md'}/>
-                          <Button type="button" onClick = {()=> open()} disabled={false} className="" title={'Connect Wallet Alt'} link="" glow={true} />
-                          <Button type="button" onClick = {handlePayment} disabled={false} className="" title={BtnTitle} link="" glow={true} />
+                          {/* <Button type="button" onClick = {()=> open()} disabled={false} className="" title={'Connect Wallet Alt'} link="" glow={true} /> */}
+                          {isConnected && (
+                            <>
+                              
+                          
+                                {params && params.price && !isNaN(params.price)? <>
+                                  {loading ? (
+                                    <Loading text={'Buying actions..'} />
+                                  ) :  (
+                                    <Button type="button" onClick = {handleTransaction} disabled={false} className="" title={`Play your game`} link="" glow={true} />
+
+                                  ) }
+                                  </>: <></>} 
+                            </>
+                          )}
                         </div>
                       }
                 </div>
@@ -171,41 +184,7 @@ function Payment() {
             </div>
         </div>
 
-        {/* TODO Main.js copy */}
-        <div className={stylesMain.container}>
-          <section className={stylesMain.container_form}>
-            {isConnected && (
-              <>
-                
-                {params && params.price && !isNaN(params.price)? <>
-                <ul>
-                  <li>Game: {params.game}</li>
-                  <li>Action: {params.action}</li>
-                  <li>Bet size per play: {params.price}</li>
-                  <li>Number of plays: {params.number}</li>
-                  <li>Total bet: {params.number*params.price}</li>
-                </ul>
-                </>: <></>}
-                  {params && params.price && !isNaN(params.price)? <>
-                  
-                        <button
-                          className={stylesMain.btn}
-                          disabled={loading === true ? 'disabled' : ''}
-                          type="button"
-                          onClick={handleTransaction}
-                        >
-                          {loading ? (
-                            <Loading text={'Buying actions..'} />
-                          ) :  (
-                            `Participate with ${params.number*params.price}ETH`
-                          ) }
-                      </button>
-                    </>: <></>}
-              </>
-            )}
-           
-          </section>
-        </div>
+       
     </div>
   )
 }
