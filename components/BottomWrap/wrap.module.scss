@@ -1,0 +1,91 @@
+@import "../../styles/variable.scss";
+
+.bottom_wrap_section {
+    padding-top: 125px;
+    padding-bottom: 162px;
+    margin-top: 60px;
+    margin-bottom: 162px;
+    position: relative;
+    background-color: $black_primary;
+    @media(max-width:1200px) {
+        padding-top: 100px;
+        padding-bottom: 125px;
+    }
+    @media(max-width:991px) {
+        padding-top: 75px;
+        padding-bottom: 90px;
+    }
+    @media(max-width:600px) {
+        padding-top: 50px;
+        padding-bottom: 60px;
+    }
+    .background {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: -40px;
+        object-fit: contain;
+        z-index: 1;
+        @media(max-width:991px) {
+            width: 991px;
+            object-position: center center;
+            object-fit: cover;
+        }
+    }
+    .col_content {
+        background-color: #FFFF09;
+        border-radius: 30px;
+        padding-top: 52px;
+        padding-bottom: 45px;
+        text-align: center;
+        @media(max-width:991px) {
+            padding-top: 45px;
+        }
+        @media(max-width:600px) {
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+        .subtitle, .title, .btn {
+            position: relative;
+            z-index: 2;
+        }
+        .subtitle {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 24px;
+            margin-bottom: 6px;
+            @media(max-width:600px) {
+                font-size: 18px;
+                line-height: 22px;
+            }
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 58px;
+            margin-bottom: 22px;
+            color: $black_primary;
+            @media(max-width:1599px) {
+                font-size: 44px;
+                line-height: 54px;
+            }
+            @media(max-width:1200px) {
+                font-size: 40px;
+                line-height: 50px;
+            }
+            @media(max-width:1100px) {
+                font-size: 35px;
+                line-height: 45px;
+            }
+            @media(max-width:600px) {
+                font-size: 32px;
+                line-height: 42px;
+            }
+            @media(max-width:450px) {
+                font-size: 28px;
+                line-height: 38px;
+            }
+        }
+    }
+}

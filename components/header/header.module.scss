@@ -1,4 +1,37 @@
+@import "../../styles/variable.scss";
+
 .header {
-    background-color: red;
-    height: 100px;
+    background-color: #0C0C0C;
+    border-bottom: 1px solid #484848;
+   
+    .col_logo {
+        display: flex;
+        align-items: center;
+        .header_logo {
+            min-height: 70px;
+            max-width: 252px;
+            object-fit: contain;
+        }
+    }
+    .col_btns {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 43px;
+        @media(max-width:991px) {
+            gap: 30px;
+        }
+        .icon {
+            .header_logo {
+                width: 100%;
+                object-fit: contain;
+                max-width: 27px;
+            }
+        }
+        @media(max-width:600px) {
+            .icon {
+                display: none;
+            }
+        }
+    }
 }
