@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import Loading from './Loading.js'
+import Loading from './Loading/Loading'
 import styles from '../styles/Main.module.css'
 import { Web3Button } from '@web3modal/react'
 import {

@@ -2,8 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import paymentStyle from './payment.module.scss';
 import styles from '../../styles/global.module.scss';
-
-import Loading from '../Loading';
+import Loading from '../Loading/Loading';
 import stylesMain from '../../styles/Main.module.css';
 import { Web3Button } from '@web3modal/react';
 import {
@@ -127,13 +126,13 @@ function Payment() {
                 <div className={`${paymentStyle.col_cta} col-lg-12`}>
                     <h2 className={`${styles.h2} ${paymentStyle.title}` }>
                       { paymentStatus === 0 ? 'Pay to enter duel' : paymentStatus === 1 ? 'Error' : 'Payment confirmed' }
-                      </h2>
+                    </h2>
                     <div className={paymentStyle.body}>
                       { paymentStatus === 0 && params && 
                         <> Pay {(params.price * params.number * 1000)/1000} ETH to play {params.number } game(s) of {params.game} </> 
                       }
-                       { paymentStatus === 0 && !params && 
-                        <> Loading ... </> 
+                      { paymentStatus === 0 && !params && 
+                       <Loading text={'Loading...'} padding="p-1"/>
                       }
                       { paymentStatus === 1 &&  
                         <>
@@ -153,22 +152,21 @@ function Payment() {
                       </div>
                       {
                         paymentStatus != 2 && 
-                        <div>
+                        <div className="p-2">
                           <Web3Button icon="hide" label="Connect Wallet" balance="hide" size={'md'}/>
                           {/* <Button type="button" onClick = {()=> open()} disabled={false} className="" title={'Connect Wallet Alt'} link="" glow={true} /> */}
                           {isConnected && (
-                            <>
-                              
-                          
+                            <div className="p-5">
+
                                 {params && params.price && !isNaN(params.price)? <>
                                   {loading ? (
-                                    <Loading text={'Buying actions..'} />
-                                  ) :  (
+                                    <Loading text={'Buying actions..'} padding=""/>
+                                   ) :  (
                                     <Button type="button" onClick = {handleTransaction} disabled={false} className="" title={`Play your game`} link="" glow={true} />
 
                                   ) }
-                                  </>: <></>} 
-                            </>
+                                  </>: <></>}
+                            </div>
                           )}
                         </div>
                       }
