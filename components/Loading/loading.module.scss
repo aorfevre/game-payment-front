@@ -1,0 +1,20 @@
+@import "../../styles/variable.scss";
+
+
+.loader_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .btn_text {
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 32px;
+        color: $white_secondary;
+        margin-left: 2;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+}
+
+

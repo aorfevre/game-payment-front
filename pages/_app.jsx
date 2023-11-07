@@ -1,9 +1,8 @@
 import '../styles/globals.css'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/react'
-import { useEffect } from 'react'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import {baseGoerli,base } from 'wagmi/chains'
+import {baseGoerli, base } from 'wagmi/chains'
 import 'bootstrap/dist/css/bootstrap.css';
 
 if (!process.env.WALLET_CONNECT_PROJECT_ID) {
@@ -37,10 +36,12 @@ function MyApp({ Component, pageProps }) {
     '--w3m-button-border-radius': '50px',
     '--w3m-background-border-radius': '50px',
     '--w3m-container-border-radius': '50px',
-    '--w3m-accent-fill-color': '0C0C0C',
-    '--w3m-color-fg-1': '0C0C0C',
+    '--w3m-accent-fill-color': '#0C0C0C',
+    '--w3m-color-fg-1': '#ffffff',
     '--w3m-text-medium-regular-text-transform': 'uppercase',
-    '--w3m-text-medium-regular-weight': '500',
+    '--w3m-text-medium-regular-weight': '600',
+    '--w3m-background-border-radius': '35px',
+    '--w3m-container-border-radius': '35px',
   }}  
   defaultChain={baseGoerli}/>
   </>
