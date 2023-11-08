@@ -66,14 +66,17 @@ function Payment() {
   useEffect(() => {
     setConnectionStat(isConnected)
 
-    if(isConnected && hash && chain && chain?.id === Number(process.env.PUBLIC_CHAIN_ID)){
+    if(hash){
 
       setTimeout(async() => {  
           const decoded = await callDecode(hash);
           console.log('Decoded',decoded)
           if(decoded && decoded.price && decoded.price >0 ){
             setParams(decoded);
-            handleTransaction(decoded,hash)
+            if(isConnected &&  chain && chain?.id === Number(process.env.PUBLIC_CHAIN_ID)){
+              handleTransaction(decoded,hash)
+
+            }
           }
       },1000)
     }
@@ -131,12 +134,12 @@ function Payment() {
                       { paymentStatus === 0 && params && 
                         <> Pay {(params.price * params.number * 1000)/1000} ETH to play {params.number } game(s) of {params.game} </> 
                       }
-                      { paymentStatus === 0 && !params && 
+                      { isConnected && paymentStatus === 0 && !params && 
                        <Loading text={'Loading...'} padding="p-1"/>
                       }
                       { paymentStatus === 1 &&  
                         <>
-                          We didn’t recognize your payment hash :{`(`} <br />
+                          We didn’t recognize your payment hash : <br />
                             Please close the tab and return to the Telegram bot and click the payment URL without making any changes to it.<br />
                             <br />
                             If the issue persists, please contact {`<contact email>`}      
