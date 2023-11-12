@@ -1,5 +1,5 @@
 import React from 'react';
-import componentStyle from './header.module.scss';
+import componentStyle from './Header.module.scss';
 import Button from '../Button/Button';
 
 
