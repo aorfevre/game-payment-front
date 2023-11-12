@@ -6,9 +6,28 @@ import CardGrid from '../components/CardGrid/CardGrid';
 import BottomWrap from '../components/BottomWrap/BottomWrap';
 import { data, dataIcon } from '../constants/data';
 import styles from "./index.module.scss";
+import { useEffect, useState } from 'react'
 
 export default function Home() {
 
+  const [params, setParams] = useState([])
+
+
+  const callHomeStats = async (params) => {
+    try {
+      const res = await fetch(`${process.env.PUBLIC_API_URL}/home/stats`);
+      const data = await res.json();
+      setParams(data)
+     return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  // copy the value to state here
+  useEffect(() => {
+    callHomeStats()
+
+  }, [])
   return (
     <div className={styles.main}>
       <Head>
@@ -22,7 +41,7 @@ export default function Home() {
 
       <Header />
       <Hero />
-      <CardGrid data={data} bgSchema='light' glow={true} />
+      <CardGrid data={params} bgSchema='light' glow={true} />
       <CardGrid data={dataIcon} bgSchema='dark'/> 
       <BottomWrap /> 
     </div>
