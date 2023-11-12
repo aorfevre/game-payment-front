@@ -20,7 +20,7 @@ steps:
     args:
     - '-c'
     - |
-      npm ci && \
+      npm install && \
       npm run build
 
   # Build the containers images
