@@ -92,6 +92,7 @@ function Payment() {
   }, [chain])
 
 
+
   const handleTransaction = async(decoded,d) => {
     setLoading(true)
     console.log('Doing a transaction',decoded)
@@ -142,7 +143,7 @@ function Payment() {
                           We didn’t recognize your payment hash : <br />
                             Please close the tab and return to the Telegram bot and click the payment URL without making any changes to it.<br />
                             <br />
-                            If the issue persists, please contact {`<contact email>`}      
+                            If the issue persists, please contact hello.deductionduel@gmail.com      
                         
                         </>
                       }
