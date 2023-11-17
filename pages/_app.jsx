@@ -43,7 +43,7 @@ function MyApp({ Component, pageProps }) {
     '--w3m-background-border-radius': '35px',
     '--w3m-container-border-radius': '35px',
   }}  
-  defaultChain={base}/>
+  defaultChain={baseGoerli}/>
   </>
 )
 }
