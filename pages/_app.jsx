@@ -9,7 +9,7 @@ if (!process.env.WALLET_CONNECT_PROJECT_ID) {
   throw new Error('You need to provide WALLET_CONNECT_PROJECT_ID env variable')
 }
 
-const chains = [baseGoerli, base]
+const chains = [baseGoerli]
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
