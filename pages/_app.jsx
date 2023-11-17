@@ -9,7 +9,17 @@ if (!process.env.WALLET_CONNECT_PROJECT_ID) {
   throw new Error('You need to provide WALLET_CONNECT_PROJECT_ID env variable')
 }
 
-const chains = [baseGoerli]
+const findChain = (chainId) => {
+  if(chainId === baseGoerli.chainId) {
+    return baseGoerli
+  }else if(chainId === base.chainId) {
+  return base
+  }else {
+    return;
+  }
+}
+const chainSelected = findChain(process.env.PUBLIC_CHAIN_ID);
+const chains = [chainSelected]
 const projectId = process.env.WALLET_CONNECT_PROJECT_ID
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
@@ -43,7 +53,7 @@ function MyApp({ Component, pageProps }) {
     '--w3m-background-border-radius': '35px',
     '--w3m-container-border-radius': '35px',
   }}  
-  defaultChain={baseGoerli}/>
+  defaultChain={chainSelected}/>
   </>
 )
 }
