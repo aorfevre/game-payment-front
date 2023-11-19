@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react'
 
 import { WagmiConfig } from 'wagmi'
-import { base,baseGoerli } from 'viem/chains'
+import { base,baseGoerli,goerli } from 'viem/chains'
 import "bootstrap/dist/css/bootstrap.css";
 
 if (!process.env.WALLET_CONNECT_PROJECT_ID) {
@@ -12,6 +12,8 @@ if (!process.env.WALLET_CONNECT_PROJECT_ID) {
 const findChain = (chainId) => {
   if (chainId === baseGoerli.chainId) {
     return baseGoerli;
+  } else if (chainId === goerli.chainId) {
+    return goerli;
   } 
     return base;
 };

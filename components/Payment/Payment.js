@@ -13,12 +13,12 @@ import {
 } from "@wagmi/core";
 import { parseEther } from "viem";
 import Button from "../Button/Button";
+import Image from 'next/image'
 
 function Payment() {
   const [paymentStatus, setPaymentStatus] = useState(0);
 
   const router = useRouter();
-  const { hash } = router.query;
 
   const [params, setParams] = useState("");
 
@@ -30,17 +30,30 @@ function Payment() {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
 
-  const callDecode = async (params) => {
+  const callDecode = async () => {
     try {
-      const res = await fetch(
-        `${process.env.PUBLIC_API_URL}/decode?hash=${encodeURIComponent(
-          decodeURIComponent(params)
-        )}`
-      );
-      const data = await res.json();
-      return data;
+      if(router.query.hash !== undefined){
+        // alert(`${process.env.PUBLIC_API_URL}/decode?hash=${encodeURIComponent(
+        //   decodeURIComponent(router.query.hash)
+        // )}`)
+        const res = await fetch(
+          `${process.env.PUBLIC_API_URL}/decode?hash=${encodeURIComponent(
+            decodeURIComponent(router.query.hash)
+          )}`
+        );
+        const data = await res.json();
+
+        return data;
+      }else{
+        return null;
+      }
+     
     } catch (err) {
+     
       console.log(err);
+      // alert('Error decoding => ',router.query.hash === undefined ? 'hash is undefined' : 'hash is not undefined')
+      console.log('Error decoding => ',router.query === undefined ? 'hash is undefined' : 'hash is not undefined')
+      return null;
     }
   };
   //save the transaction hash to my api /play
@@ -59,37 +72,41 @@ function Payment() {
 
   // copy the value to state here
   useEffect(() => {
-    if (hash) {
-      setTimeout(async () => {
-        const decoded = await callDecode(hash);
-        console.log("Decoded", decoded);
-        if (decoded && decoded.price && decoded.price > 0) {
-          setParams(decoded);
-          // if (
-          //   isConnected &&
-          //   chain &&
-          //   chain?.id === Number(process.env.PUBLIC_CHAIN_ID)
-          // ) {
-          //   handleTransaction(decoded,hash)
-          // }
-        }
-      }, 10);
+    if (router.query.hash !== undefined) {
+
+        setTimeout(async () => {
+
+            const decoded = await callDecode(router.query.hash);
+
+            if (decoded && decoded.price && decoded.price > 0) {
+              setParams(decoded);
+              // if (
+              //   isConnected &&
+              //   chain &&
+              //   chain?.id === Number(process.env.PUBLIC_CHAIN_ID)
+              // ) {
+              //   handleTransaction(decoded,hash)
+              // }
+            }else{
+            }
+      }, 100);
     }
-  }, [ hash]);
+
+  }, [ router.query.hash]);
 
   useEffect(() => {
-    console.log('Chain',chain.id)
     if (
       isConnected &&
       chain &&
-      chain?.id === Number(process.env.PUBLIC_CHAIN_ID)
+      chain?.id  && 
+      Number(chain?.id)=== Number(process.env.PUBLIC_CHAIN_ID)
     ) {
       setNetworkValid(true)
     }else{
       setNetworkValid(false)
 
     }
-  }, [chain]);
+  }, [isConnected,chain]);
 
   const switchNetworkToApp = async()=>{
         if (
@@ -115,7 +132,7 @@ function Payment() {
       });
       console.log("HASH OF THE TRANSCATION", hash);
       // Transaction is sent !
-      savePlayTransaction(d, hash);
+      savePlayTransaction(router.query.hash, hash);
 
       const data = await waitForTransaction({
         hash,
@@ -139,9 +156,12 @@ function Payment() {
               paymentStatus === 2 && paymentStyle.confirmed
             } text-center col-lg-12`}
           >
-            <img
+            <Image
               src="/assets/images/logo.svg"
               alt="logo"
+              width="256px"
+              height="52px"
+              layout="intrinsic"
               className={paymentStyle.logo}
             />
           </div>
@@ -161,8 +181,19 @@ function Payment() {
                   {params.number} game(s) of {params.game}{" "}
                 </>
               )}
-              {isConnected && paymentStatus === 0 && !params && (
+              {isConnected && paymentStatus === 0 && networkValid && !params && (
                 <Loading text={"Loading..."} padding="p-1" />
+              )}
+              {isConnected && paymentStatus === 0 && !networkValid && (
+                <Button
+                type="button"
+                onClick={switchNetworkToApp}
+                disabled={false}
+                className=""
+                title={`Switch Network to Play`}
+                link=""
+                glow={true}
+              />
               )}
               {paymentStatus === 1 && (
                 <>
@@ -222,15 +253,7 @@ function Payment() {
                    </>
                     ):<>{ 
                       isConnected && networkValid === false ? (
-                      <> <Button
-                      type="button"
-                      onClick={switchNetworkToApp}
-                      disabled={false}
-                      className=""
-                      title={`Switch Network to Play`}
-                      link=""
-                      glow={true}
-                    /></>
+                      <> </>
                     ) : (<></>)}
                     </>
                   }
