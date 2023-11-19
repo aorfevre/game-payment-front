@@ -6,7 +6,7 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { baseGoerli, base } from "wagmi/chains";
+import { baseGoerli, base,goerli } from "wagmi/chains";
 import "bootstrap/dist/css/bootstrap.css";
 
 if (!process.env.WALLET_CONNECT_PROJECT_ID) {
@@ -16,7 +16,8 @@ if (!process.env.WALLET_CONNECT_PROJECT_ID) {
 const findChain = (chainId) => {
   if (chainId === baseGoerli.chainId) {
     return baseGoerli;
-  } 
+  } else if (chainId === goerli.chainId) {
+  }
     return base;
 };
 const chainSelected = findChain(process.env.PUBLIC_CHAIN_ID);

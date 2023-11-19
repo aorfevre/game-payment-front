@@ -25,7 +25,6 @@ function Payment() {
 
 
   const router = useRouter()
-  const {push} = useRouter()
   const {hash} = router.query
 
   const [params, setParams] = useState('')
@@ -33,6 +32,7 @@ function Payment() {
   // Component Wagmi state to avoid hydration warning/error
   const [connectionStat, setConnectionStat] = useState()
   const [loading, setLoading] = useState(false)
+  const [rightNetwork, setRightNetwork] = useState(false)
 
   // Wagmi Account
   const { isConnected } = useAccount()
@@ -73,38 +73,42 @@ function Payment() {
           console.log('Decoded',decoded)
           if(decoded && decoded.price && decoded.price >0 ){
             setParams(decoded);
-            if(isConnected &&  chain && chain?.id === Number(process.env.PUBLIC_CHAIN_ID)){
-              handleTransaction(decoded,hash)
+            // if(isConnected &&  chain && chain?.id === Number(process.env.PUBLIC_CHAIN_ID)){
+            //   handleTransaction(decoded,hash)
 
-            }
+            // }
           }
       },1000)
     }
   }, [isConnected,hash])
 
   useEffect(() => {
-    if (isConnected && chain && chain?.id !== Number(process.env.PUBLIC_CHAIN_ID)) {
-      setTimeout(()=>{
-        switchNetwork({chainId:Number(process.env.PUBLIC_CHAIN_ID)})
-
-      },500)
+    if (isConnected && chain && chain?.id === Number(process.env.PUBLIC_CHAIN_ID)) {
+      setRightNetwork(true)
+    }else{
+      setRightNetwork(false)
     }
   }, [chain])
 
+  const switchNetworkToApp = async()=>{
+      if (isConnected && chain && chain?.id !== Number(process.env.PUBLIC_CHAIN_ID)) {
+        switchNetwork({chainId:Number(process.env.PUBLIC_CHAIN_ID)})
+    }
+  }
 
 
-  const handleTransaction = async(decoded,d) => {
+  const handleTransaction = async() => {
     setLoading(true)
-    console.log('Doing a transaction',decoded)
-    if(decoded && decoded.price >0){
+    console.log('Doing a transaction',params)
+    if(params && params.price >0){
       const { hash } = await sendTransaction({
         chainId: Number(process.env.PUBLIC_CHAIN_ID),
-        to: decoded.payout_wallet,
-        value: parseEther(((decoded.price * decoded.number * 1000)/1000 ).toString()),
+        to: params.payout_wallet,
+        value: parseEther(((params.price * params.number * 1000)/1000 ).toString()),
       })
       console.log('HASH OF THE TRANSCATION',hash)
       // Transaction is sent ! 
-      savePlayTransaction(d,hash)
+      savePlayTransaction(router.query.hash,hash)
   
       const data = await waitForTransaction({
         hash
@@ -159,7 +163,7 @@ function Payment() {
                         <div className="p-2">
                           <Web3Button icon="hide" label="Connect Wallet" balance="hide" size={'md'}/>
                           {/* <Button type="button" onClick = {()=> open()} disabled={false} className="" title={'Connect Wallet Alt'} link="" glow={true} /> */}
-                          {isConnected && (
+                          {isConnected && rightNetwork && (
                             <div className="p-5">
 
                                 {params && params.price && !isNaN(params.price)? <>
@@ -170,6 +174,14 @@ function Payment() {
 
                                   ) }
                                   </>: <></>}
+                            </div>
+                          )}
+                          {isConnected && !rightNetwork && (
+                            <div className="p-5">
+
+                               
+                                <Button type="button" onClick = {switchNetworkToApp} disabled={false} className="" title={`Switch Network to Play`} link="" glow={true} />
+
                             </div>
                           )}
                         </div>
